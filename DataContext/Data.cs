@@ -17,7 +17,7 @@ namespace hr_app.api.DataContext
             _connectionString = connectionString;
         }
 
-        public async Task<int> ExecuteQueryAsync(string query, IDictionary<string, object> parameters = null)
+        public async Task<int> ExecuteQueryAsync(string query, IDictionary<string, object> ?parameters = null)
         {
             using MySqlConnection connection = new MySqlConnection(_connectionString);
             using MySqlCommand command = new MySqlCommand(query, connection);
@@ -35,25 +35,33 @@ namespace hr_app.api.DataContext
             return await command.ExecuteNonQueryAsync();
         }
 
-        public async Task<DataTable> GetDataTableAsync(string query, IDictionary<string, object> parameters = null)
+        public async Task<DataTable> GetDataTableAsync(string query, IDictionary<string, object> ?parameters = null)
         {
-            using MySqlConnection connection = new MySqlConnection(_connectionString);
-            using MySqlCommand command = new MySqlCommand(query, connection);
-
-            if (parameters != null)
-            {
-                foreach (var parameter in parameters)
-                {
-                    command.Parameters.AddWithValue(parameter.Key, parameter.Value);
-                }
-            }
-
-            await connection.OpenAsync();
-
-            using DbDataReader reader = await command.ExecuteReaderAsync();
             DataTable dataTable = new DataTable();
-            dataTable.Load(reader);
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(_connectionString);
+                using MySqlCommand command = new MySqlCommand(query, connection);
 
+                if (parameters != null)
+                {
+                    foreach (var parameter in parameters)
+                    {
+                        command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+                    }
+                }
+
+                await connection.OpenAsync();
+
+                using DbDataReader reader = await command.ExecuteReaderAsync();
+                dataTable.Load(reader);
+
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return dataTable;
         }
 
