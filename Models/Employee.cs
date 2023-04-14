@@ -7,6 +7,6 @@
         public string? Last_Name { get; set;}
         public string? Email { get; set;}
         public string? Phone_number { get; set;}
-        public string? Job_ID { get; set;}
+        public int Job_ID { get; set;}
     }
 }

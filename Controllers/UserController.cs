@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace hr_app.api.Controllers
 {
+    [Route("api/")]
+
     public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;

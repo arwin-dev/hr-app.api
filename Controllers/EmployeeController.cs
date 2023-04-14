@@ -40,5 +40,34 @@ namespace hr_app.api.Controllers
             return Content(serializedData, "application/json");
         }
 
+ /*       [HttpPost]
+        public async Task<IActionResult> AddNewEmployee([FromBody] Employee employee)
+        {
+            string query = "INSERT INTO employee (Employee_ID, First_name, Last_name, Email, Phone_number, Job_ID) " +
+                           "VALUES (@Employee_ID, @First_name, @Last_name, @Email, @Phone_number, @Job_ID)";
+
+            var parameters = new Dictionary<string, object>()
+            {
+                {"@Employee_ID", employee.Employee_ID},
+                {"@First_name", employee.First_Name},
+                {"@Last_name", employee.Last_Name},
+                {"@Email", employee.Email},
+                {"@Phone_number", employee.Phone_number},
+                {"@Job_ID", employee.Job_ID}
+            };
+
+            var result = await _mySqlManager.ExecuteQueryAsync(query, parameters);
+
+            if (result == 1)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }*/
+
+
     }
 }
