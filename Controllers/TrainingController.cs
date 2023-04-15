@@ -60,21 +60,22 @@ namespace hr_app.api.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddTraining(Dictionary<string, object> trainingDict)
         {
-            string query = "INSERT INTO employee_training (Start_date, Completion_date, Score, Employee_ID, Training_ID) " +
-                           "VALUES (@Start_date, @Completion_date, @Score, @Employee_ID, @Training_ID)";
+            string query = "INSERT INTO employee_training (Start_date, Score, Employee_ID, Training_ID) " +
+                           "VALUES (@Start_date, @Score, @Employee_ID, @Training_ID)";
 
             var parameters = new Dictionary<string, object>()
             {
                 {"@Start_date", trainingDict["Start_date"]},
-                {"@Completion_date", DBNull.Value},
                 {"@Score", -1 },
                 {"@Employee_ID", trainingDict["Employee_ID"]},
                 {"@Training_ID", trainingDict["Training_ID"]},
             };
 
-            if (trainingDict.ContainsKey("Completion_date") && trainingDict["Completion_date"] != null)
+            if (trainingDict["Completion_date"].ToString() != "")
             {
-                parameters["@Completion_date"] = trainingDict["Completion_date"];
+                query = "INSERT INTO employee_training (Start_date, Completion_date, Score, Employee_ID, Training_ID) " +
+                           "VALUES (@Start_date, @Completion_date, @Score, @Employee_ID, @Training_ID)";
+                parameters.Add("@Completion_date", trainingDict["Completion_date"]);
             }
 
             var result = await _sqlManager.ExecuteQueryAsync(query, parameters);

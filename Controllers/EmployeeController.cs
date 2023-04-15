@@ -40,6 +40,27 @@ namespace hr_app.api.Controllers
             return Content(serializedData, "application/json");
         }
 
+        [HttpGet("getEmpDetails")]
+        public async Task<IActionResult> GetEmployeeDetails(string empID)
+        {
+            string query = "SELECT e.First_name, e.Last_name, e.Email, e.Phone_number, j.Title, j.Description FROM employee e, job j WHERE e.Job_ID = j.Job_ID AND e.Employee_ID = @empID";
+
+            var parameters = new Dictionary<string, object>()
+            {
+                {"@empID", empID }
+            };
+
+            var empDetails = await _mySqlManager.GetDataTableAsync(query, parameters);
+
+            if(empDetails.Rows.Count == 0)
+            {
+                return NotFound();
+            }
+
+            var serializedData = JsonConvert.SerializeObject(empDetails);
+            return Content(serializedData, "application/json");
+        }
+
  /*       [HttpPost]
         public async Task<IActionResult> AddNewEmployee([FromBody] Employee employee)
         {
