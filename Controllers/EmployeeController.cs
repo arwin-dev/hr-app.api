@@ -61,6 +61,23 @@ namespace hr_app.api.Controllers
             return Content(serializedData, "application/json");
         }
 
+        [HttpGet("managerCheck")]
+        public async Task<IActionResult> ManagerCheck(string empID)
+        {
+            string query = "SELECT EXISTS (  SELECT *  FROM employee e, job j WHERE e.Job_ID = j.Job_ID AND j.Title LIKE '%Manager%' AND e.Employee_ID = @empID) AS result;";
+
+            var parameters = new Dictionary<string, object>()
+            {
+                {"@empID", empID }
+            };
+
+            var manager = await _mySqlManager.GetDataTableAsync(query, parameters);
+
+            if (manager.Rows.Count == 0) { return NotFound(); }
+
+            var serializedData = JsonConvert.SerializeObject(manager);
+            return Content(serializedData, "application/json");
+        }
  /*       [HttpPost]
         public async Task<IActionResult> AddNewEmployee([FromBody] Employee employee)
         {
