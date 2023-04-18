@@ -57,6 +57,30 @@ namespace hr_app.api.Controllers
             return Content(serializedData, "application/json");
         }
 
+        [HttpPost("createTraining")]
+        public async Task<IActionResult> createTraining(Dictionary<string, object> trainingDict)
+        {
+            string query = "INSERT INTO training ( Name, Mode)  VALUES (@name, @mode)";
+
+            var parameters = new Dictionary<string, object>()
+            {
+                {"@name", trainingDict["Name"]},
+                {"@mode", trainingDict["Mode"]},
+            };
+
+            var result = await _sqlManager.ExecuteQueryAsync(query, parameters);
+
+            if (result == 1)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+        }
+
         [HttpPost("add")]
         public async Task<IActionResult> AddTraining(Dictionary<string, object> trainingDict)
         {
