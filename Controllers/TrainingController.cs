@@ -21,11 +21,16 @@ namespace hr_app.api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTrainingDetails()
+        public async Task<IActionResult> GetTrainingDetails(string empID)
         {
-            string query = "SELECT t.Training_ID, t.Name FROM training t";
+            string query = "SELECT t.Training_ID, t.Name FROM training t WHERE t.Training_ID NOT IN (SELECT et.Training_ID FROM employee_training et WHERE et.Employee_ID = @empID);";
 
-            var trainings = await _sqlManager.GetDataTableAsync(query);
+            var parameters = new Dictionary<string, object>
+            {
+                { "@empID", empID }
+            };
+
+            var trainings = await _sqlManager.GetDataTableAsync(query,parameters);
 
             if (trainings.Rows.Count == 0)
             {
