@@ -25,12 +25,26 @@ namespace hr_app.api.Controllers
             {
                 { "@empID", empID }
             };
-            var leaves = await _mySqlManager.GetDataTableAsync(query,parameters);
+            var leaves = await _mySqlManager.GetDataTableAsync(query, parameters);
 
-            if (leaves.Rows.Count == 0)
+
+
+            var serializedData = JsonConvert.SerializeObject(leaves);
+
+            return Content(serializedData, "application/json");
+        }
+
+        [HttpGet("getPto")]
+        public async Task<IActionResult> GetPto(string empID)
+        {
+            string query = "SELECT  j.PTO FROM employee e, job j WHERE e.Job_ID = j.Job_ID AND e.Employee_ID = @empID";
+            var parameters = new Dictionary<string, object>
             {
-                return NotFound();
-            }
+                { "@empID", empID }
+            };
+            var leaves = await _mySqlManager.GetDataTableAsync(query, parameters);
+
+
 
             var serializedData = JsonConvert.SerializeObject(leaves);
 
