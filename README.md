@@ -1,4 +1,4 @@
-# HR Management Portal - ASP.NET Web API - COP 4710 (Database Sesign) Project
+# HR Management Portal - ASP.NET Web API - COP 4710 (Database Design) Project
 This web API application is built on .NET Core 6 and provides functionality related to Employee management, Leaves, and Training.
 
 ## Endpoints
